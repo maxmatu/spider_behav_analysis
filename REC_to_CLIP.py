@@ -10,9 +10,9 @@ import cv2
 import os
 import sys
 
-tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\29_10_19_sp1_LDR.tdms'
+tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\30_10_19_sp10_LDR.tdms'
 tdms_file = TdmsFile(tdms_path)
-videofilepath = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\29_10_19_sp1.avi'
+videofilepath = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\29_10_19_sp4.avi'
 
 photodiode_raw = tdms_file.group_channels('Photodiode')[0].data
 spider_camera_input = tdms_file.group_channels('spider_camera_input')[0].data
@@ -202,7 +202,7 @@ def trim_clip(videofilepath, savepath,
         savepath {[str]} -- [where to save]
     Keyword Arguments:
         start_frame {[type]} -- [video frame to stat at ] (default: {None})
-        end_frame {[type]} -- [videoframe to stop at ] (default: {None})
+        stop_frame {[type]} -- [videoframe to stop at ] (default: {None})
     """
     # Open reader and writer
     cap = cv2.VideoCapture(videofilepath)
@@ -225,7 +225,7 @@ def trim_clip(videofilepath, savepath,
                 writer.write(frame)
     writer.release()
 
-def make_clips_session(videofilepath, stim_frames):
+def make_clips_session(videofilepath, stim_frames, s_before_start=5, s_after_end=5, fps=40):
 
     for clipn, (start, end) in enumerate(stim_frames):
         print("Saving clip for stim {} of {}".format(clipn, len(stim_frames)))
@@ -236,7 +236,7 @@ def make_clips_session(videofilepath, stim_frames):
 
         clipfile = os.path.join(fld, clip_name)
 
-        trim_clip(videofilepath, clipfile, start_frame=int(start), stop_frame=int(end))
+        trim_clip(videofilepath, clipfile, start_frame=int(start)-fps*s_before_start, stop_frame=int(end))+fps*s_after_end
 
 #Extracting stimulus onsets and offsets from a TDMS file
 stim_times, filtered = find_visual_stimuli(photodiode_raw, th, sampling_rate)
@@ -248,4 +248,4 @@ stim_frames = np.round(np.multiply(np.divide(stim_times, sampling_rate), fps))
 print(stim_frames)
 
 #Cutting out and saving short clips of behaviour following the stimulus from the raw video
-make_clips_session(videofilepath, stim_frames)
+#make_clips_session(videofilepath, stim_frames)

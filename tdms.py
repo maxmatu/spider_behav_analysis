@@ -7,7 +7,7 @@ from scipy.signal import butter, lfilter, freqz, resample, wiener, gaussian
 from scipy.ndimage import filters
 from collections import namedtuple
 
-tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\30.10.19_sp11_LDR.tdms'
+tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\30_10_19_sp10_LDR.tdms'
 tdms_file = TdmsFile(tdms_path)
 
 photodiode_raw = tdms_file.group_channels('Photodiode')[0].data
@@ -66,8 +66,12 @@ def find_visual_stimuli(data, th, sampling_rate):
     filtered  = butter_lowpass_filter(remove_noise(data), 75, int(sampling_rate/2))
     d_filt = np.diff(filtered)
     # find start and ends of stimuli (when it goes above and under threhsold)
-    ends = find_peaks_in_signal(d_filt, 50, -0.0025, above=False )[1:]
-    starts = find_peaks_in_signal(d_filt, 50, 0.0025, above=True )[1:]
+    ends = find_peaks_in_signal(d_filt, 1, -0.0025, above=False )
+    starts = find_peaks_in_signal(d_filt, 10, 0.0025, above=True )[1:]
+
+    # ignore ends picked up at the very end of signal
+    ends = [e for e in ends if len(data)-e > 500000]
+
     # if the number of starts and ends doesnt match something went wrong
     if not len(starts) == len(ends):
         if abs(len(starts)-len(ends))>1: raise ValueError("Too large error during detection: s:{} e{}".format(len(starts), len(ends)))
@@ -98,14 +102,14 @@ stim_times, filtered = find_visual_stimuli(photodiode_raw, 1.5, 25000)
 print(stim_times)
 print("Found {} stimuli".format(len(stim_times)))
 
-# print("plotting")
-# f, ax = plt.subplots()
-# ax.plot(photodiode_raw, color="k", lw=2)
-# ax.plot(filtered, color="r", lw=1)
-# for start, end in stim_times:
-#     ax.axvline(start, color="g")
+print("plotting")
+f, ax = plt.subplots()
+ax.plot(filtered, color="r", lw=1)
+for start, end in stim_times:
+    ax.axvline(start, color="g")
+    ax.axvline(end, color="b")
 
-# plt.show()
+plt.show()
 
 
 

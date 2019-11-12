@@ -9,10 +9,13 @@ from collections import namedtuple
 import cv2  
 import os
 import sys
+import shutil
+#sys.path.append("./")
+#from tdms import find_visual_stimuli # importing function from another script
 
-tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\30_10_19_sp10_LDR.tdms'
+tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\08_11_19_sp10_LDR.tdms'
 tdms_file = TdmsFile(tdms_path)
-videofilepath = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\29_10_19_sp4.avi'
+videofilepath = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Raw_data\def_behav_probe\08_11_19_sp10.avi'
 
 photodiode_raw = tdms_file.group_channels('Photodiode')[0].data
 spider_camera_input = tdms_file.group_channels('spider_camera_input')[0].data
@@ -74,8 +77,9 @@ def find_visual_stimuli(data, th, sampling_rate):
     filtered  = butter_lowpass_filter(remove_noise(data), 75, int(sampling_rate/2))
     d_filt = np.diff(filtered)
     # find start and ends of stimuli (when it goes above and under threhsold)
-    ends = find_peaks_in_signal(d_filt, 50, -0.0025, above=False )[1:]
-    starts = find_peaks_in_signal(d_filt, 50, 0.0025, above=True )[1:]
+    ends = find_peaks_in_signal(d_filt, 50, -0.0025, above=False )
+    starts = find_peaks_in_signal(d_filt, 50, 0.0026, above=True )[1:]
+    ends = [e for e in ends if len(data)-e > 500000]
     # if the number of starts and ends doesnt match something went wrong
     if not len(starts) == len(ends):
         if abs(len(starts)-len(ends))>1: raise ValueError("Too large error during detection: s:{} e{}".format(len(starts), len(ends)))
@@ -193,8 +197,7 @@ def open_cvwriter(filepath, w=None, h=None, framerate=None, format='.mp4', iscol
     else:
         return videowriter
         
-def trim_clip(videofilepath, savepath, 
-                start_frame=None, stop_frame=None):
+def trim_clip(videofilepath, savepath, start_frame=None, stop_frame=None):
     """trim_clip [take a videofilepath, open it and save a trimmed version between start and stop. Either 
     looking at a proportion of video (e.g. second half) or at start and stop frames]
     Arguments:
@@ -214,7 +217,7 @@ def trim_clip(videofilepath, savepath,
     cap.set(1,start_frame)
     while True:
         cur_frame += 1
-        if cur_frame % 100 == 0: print('Current frame: ', cur_frame)
+        if cur_frame % 1000 == 0: print('Current frame: ', cur_frame)
         if cur_frame <= start_frame: continue
         elif cur_frame >= stop_frame: break
         else:
@@ -227,17 +230,22 @@ def trim_clip(videofilepath, savepath,
 
 def make_clips_session(videofilepath, stim_frames, s_before_start=5, s_after_end=5, fps=40):
 
+    fld, name = os.path.split(videofilepath)
+    clip_name, extention = name.split(".")[0], name.split(".")[1]
+    new_folder = clip_name
+    new_folder_path = os.path.join(fld, clip_name)
+    os.makedirs(new_folder_path)
+    print(" new folder created")
+    
     for clipn, (start, end) in enumerate(stim_frames):
         print("Saving clip for stim {} of {}".format(clipn, len(stim_frames)))
-
-        fld, name = os.path.split(videofilepath)
-        clip_name, extention = name.split(".")[0], name.split(".")[1]
         clip_name += "_trial{}.{}".format(clipn, extention)
+        
+        clipfile = os.path.join(new_folder_path, clip_name)
 
-        clipfile = os.path.join(fld, clip_name)
-
-        trim_clip(videofilepath, clipfile, start_frame=int(start)-fps*s_before_start, stop_frame=int(end))+fps*s_after_end
-
+        trim_clip(videofilepath, clipfile, start_frame=int(start)-fps*s_before_start, stop_frame=int(end)+fps*s_after_end)
+    shutil.move(tdms_path, new_folder_path)
+    shutil.move(videofilepath, new_folder_path)
 #Extracting stimulus onsets and offsets from a TDMS file
 stim_times, filtered = find_visual_stimuli(photodiode_raw, th, sampling_rate)
 print(stim_times)
@@ -248,4 +256,4 @@ stim_frames = np.round(np.multiply(np.divide(stim_times, sampling_rate), fps))
 print(stim_frames)
 
 #Cutting out and saving short clips of behaviour following the stimulus from the raw video
-#make_clips_session(videofilepath, stim_frames)
+make_clips_session(videofilepath, stim_frames, s_before_start=5, s_after_end=5, fps=40)

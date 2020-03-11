@@ -1,0 +1,46 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from utils import compute_distance
+
+trial_1 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial0DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+trial_2 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial1DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+trial_3 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial2DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+trial_4 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial3DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+trial_5 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial4DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+trial_6 = pd.read_hdf(r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\17_02_20_sp2\video_trial6DLC_resnet50_large_spidersJan27shuffle1_1030000.h5')
+#trial_7 
+#trial_8
+x1, y1 = (trial_1['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_1['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+x2, y2 = (trial_2['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_2['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+x3, y3 = (trial_3['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_3['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+x4, y4 = (trial_4['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_4['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+x5, y5 = (trial_5['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_5['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+x6, y6 = (trial_6['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['x'], trial_6['DLC_resnet50_large_spidersJan27shuffle1_1030000']['centre']['y'])
+
+fig, ax = plt.subplots(figsize=(10,10))
+ax.set_ylim(0, 1024)
+ax.set_xlim(0, 1024)
+plt.plot(x1, y1,color="r")
+plt.plot(x2, y2,color="g")
+plt.show()
+fig, ax = plt.subplots(figsize=(10,10))
+ax.set_ylim(0, 1024)
+ax.set_xlim(0, 1024)
+plt.plot(x3, y3,color="b")
+plt.show()
+fig, ax = plt.subplots(figsize=(10,10))
+ax.set_ylim(0, 1024)
+ax.set_xlim(0, 1024)
+plt.plot(x4, y4,color="y")
+plt.show()
+fig, ax = plt.subplots(figsize=(10,10))
+ax.set_ylim(0, 1024)
+ax.set_xlim(0, 1024)
+plt.plot(x5, y5,color="m")
+plt.show()
+fig, ax = plt.subplots(figsize=(10,10))
+ax.set_ylim(0, 1024)
+ax.set_xlim(0, 1024)
+plt.plot(x6, y6,color="c")
+plt.show()

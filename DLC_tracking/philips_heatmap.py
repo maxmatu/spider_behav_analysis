@@ -5,16 +5,16 @@ import numpy as np
 from behaviour.tracking.tracking import prepare_tracking_data
 import cv2
 # Load background image
-data_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\03_02_20_sp5_processed_centre_tracking.h5')
-bcgd_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\03_02_20_sp5_background.png')
-save_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\03_02_20_sp5_overlayed_PS_heatmap.png')
+data_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\06_02_20_sp13_processed_centre_tracking.h5')
+bcgd_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\06_02_20_sp13_background.png')
+save_path = (r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_exploration\06_02_20_sp13_overlayed_PS_heatmap.png')
 # Load the data after processing
 processed_data = pd.read_hdf(data_path)
 # get y and y coordinates
 x, y = (processed_data['x'], processed_data['y'])
 print('data loaded')
 # Enter parameters
-saturation_percentile = 98
+saturation_percentile = 100
 color_dimming = .67
 dots_multiplier = .8
 # Enter coordinates

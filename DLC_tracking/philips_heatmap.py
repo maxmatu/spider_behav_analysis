@@ -14,7 +14,7 @@ processed_data = pd.read_hdf(data_path)
 x, y = (processed_data['x'], processed_data['y'])
 print('data loaded')
 # Enter parameters
-saturation_percentile = 100
+saturation_percentile = 100git
 color_dimming = .67
 dots_multiplier = .8
 # Enter coordinates

@@ -15,7 +15,7 @@ def model_arena(size, show_arena):
     ''' NOTE: this is the model arena for the Barnes maze with wall
     this function must be customized for any other arena'''
     # initialize model arena image, 1000 x 1000 corresponds to 1m x 1m for convienience
-    model_arena = np.zeros((1152, 1216)).astype(np.uint8)
+    model_arena = np.zeros((1024, 1024)).astype(np.uint8)
 
     '''
     Customize this section below for your own arena! (look up these functions in the opencv tutorial pages for help)
@@ -27,20 +27,24 @@ def model_arena(size, show_arena):
     # add circular arena
     x = int(size[0]/2)
     y = int(size[1]/2)
-    
-    cv2.circle(model_arena, (x, y), 568, 255, -1)
-    #cv2.circle(model_arena, (x, y), 500, 255, -1)
-    #cv2.circle(model_arena, (x, y), 44, 180, -1)
-    #cv2.circle(model_arena, (x, y), 40, 180, -1) # centre cordinates, radius, colour, filling 
+
+    cv2.circle(model_arena, (x, y), 512, 255, -1) #(used for (1024, 1024)) # used for vertical arena
+    #cv2.circle(model_arena, (x, y), 568, 255, -1) #(used for (1152, 1216))
+    #cv2.circle(model_arena, (x, y), 500, 255, -1) #(used for (1000, 1000))
+    #cv2.circle(model_arena, (x, y), 44, 180, -1) #(used for (1152, 1216))
+    #cv2.circle(model_arena, (x, y), 40, 180, -1) #(used for (1000, 1000)) # centre cordinates, radius, colour, filling 
 
     # THESE ARE THE FOUR POINTS USED TO INITIATE REGISTRATION -- CUSTOMIZE FOR YOUR OWN PURPOSES
     # here points are in 1000 pixels = 1 meter space, then adjusted to match to size of the image
-  
 
-    points = np.array(([x, y-568], [x-492, y-284], [x-492, y+284], [x, y+568], [x+492, y+284], [x+492, y-284]))
-    #points = np.array(([x-568, y], [x-284, y-492], [x+284, y-492], [x+568, y], [x+284, y+492], [x-284, y+492]))
-    #points = np.array(([x-500, y], [x-250, y-433], [x+250, y-433], [x+500, y], [x+250, y+433], [x-250, y+433]))
-    #points = np.array(([x, y], [x, y-500], [x-433, y-250], [x-433, y+250], [x, y+500], [x+433, y+250], [x+433, y-250]))
+
+   
+    
+    points = np.array(([x-175, y-15], [x-175, y+15], [x+175, y+15], [x+175, y-15]))
+    #points = np.array(([x, y-568], [x-492, y-284], [x-492, y+284], [x, y+568], [x+492, y+284], [x+492, y-284])) (used for (1152, 1216) and 2-2-2 arrangement)
+    #points = np.array(([x-568, y], [x-284, y-492], [x+284, y-492], [x+568, y], [x+284, y+492], [x-284, y+492])) (used for (1152, 1216) and 1-2-2-1 arrangement)
+    #points = np.array(([x-500, y], [x-250, y-433], [x+250, y-433], [x+500, y], [x+250, y+433], [x-250, y+433])) (used for (1000, 1000) and 1-2-2-1 arrangement)
+    #points = np.array(([x, y-500], [x-433, y-250], [x-433, y+250], [x, y+500], [x+433, y+250], [x+433, y-250])) (used for (1000, 1000) and 2-2-2 arrangement)
 
     '''
     Customize this section above for your own arena!

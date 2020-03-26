@@ -14,20 +14,22 @@ from utils import remove_pulses
 from utils import get_times_signal_high_and_low
 from utils import make_clips_session
 
-tdms_path = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\19_02_20_sp7\spider_camera_ldr(0).tdms' 
-tdms_file = TdmsFile(tdms_path)
-videofilepath = r'C:\Users\maksymilianm\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\19_02_20_sp7\video.avi' 
-
+tdms_path = r'C:\Users\maxma\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\06_03_20_sp8\spider_camera_ldr(0).tdms' 
+videofilepath = r'C:\Users\maxma\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\06_03_20_sp8\video.avi' 
+photodiode_raw_path = r'C:\Users\maxma\Dropbox (UCL - SWC)\Project_spiders\Analysis\confined_shade_arena_escape\06_03_20_sp8\photodiode_raw.svg'
 fps = 40 
 sampling_rate = 25000
+# Load the tdms File with LDR signal
+tdms_file = TdmsFile(tdms_path)
 
 photodiode_raw = tdms_file.group_channels('Photodiode')[0].data
-spider_camera_input = tdms_file.group_channels('spider_camera_input')[0].data
+plt.plot(photodiode_raw)
+plt.savefig(photodiode_raw_path)
+plt.show()
 
 photodiode_smoothed = remove_pulses(photodiode_raw, fps, sampling_rate)
 
-plt.plot(photodiode_raw)
-plt.show()
+
 
 onsets, offsets = get_times_signal_high_and_low(photodiode_smoothed, 0.8)
 print(onsets, offsets)

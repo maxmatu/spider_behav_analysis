@@ -13,11 +13,11 @@ import shutil
 
 def remove_pulses(data, fps, sampling_rate):
     photodiode_smoothed = data.copy()
-    signal_onset = np.where(np.diff(photodiode_smoothed) > .8)[0]
+    signal_onset = np.where(np.diff(photodiode_smoothed) > .5)[0]
     signal_duration = (5*sampling_rate)
     for onset in signal_onset: 
-        photodiode_smoothed[onset:onset+signal_duration] = photodiode_smoothed[onset]
-    return photodiode_smoothed
+        photodiode_smoothed[onset:onset+signal_duration] = 1.7
+    return photodiode_smoothed, signal_onset
 
 def get_times_signal_high_and_low(signal, th=1):
     """
